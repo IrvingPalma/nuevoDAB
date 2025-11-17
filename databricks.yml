@@ -1,0 +1,42 @@
+bundle:
+  name: bigdata-etl
+  workspace:
+    root_path: /Shared/${bundle.name}
+
+# 👇 Declaración correcta de variables (como mapas con default)
+variables:
+  cluster_policy_id:
+    default: ""
+  spark_version:
+    default: "14.3.x-scala2.12"
+  node_type_id:
+    default: "Standard_DS3_v2"
+  num_workers:
+    default: 1
+  workspace_host:
+    default: ""
+
+targets:
+  dev:
+    workspace:
+      root_path: /Shared/GitHub/dev
+    variables:
+      num_workers: 1        # override solo para dev
+  prod:
+    workspace:
+      root_path: /Shared/GitHub/prd
+    variables:
+      num_workers: 1        # override para prod
+  
+
+resources:
+  jobs:
+    DAB_JOB:
+      name: DAB-JOB
+      tasks:
+        - task_key: TaskPipeline
+          pipeline_task:
+            pipeline_id: 1a15e94c-29de-42c8-8406-9274ba799c34
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
